@@ -1,0 +1,10 @@
+Build.PL
+Changes
+MANIFEST
+README
+lib/Bio/GMOD/RPC/Formatter.pm
+lib/Bio/GMOD/RPC/Provider.pm
+t/00-load.t
+t/manifest.t
+t/pod-coverage.t
+t/pod.t
