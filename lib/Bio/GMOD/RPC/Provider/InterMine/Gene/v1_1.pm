@@ -35,10 +35,7 @@ sub get_data {
         $rs = $rs->where("$params{type}.organism.species" => $params{species});
     }
 
-    [ map {$_->{accession} = $_->{primaryIdentifier}; $_} 
-        map { my $row = $_->href;
-            {map { $_ => $row->{$_} } grep { $_ !~ /^$params{type}/} keys %$row};
-        } $rs->all()];
+    [ map {$_->{accession} = $_->{primaryIdentifier}; $_} map { $_->href } $rs->all()];
 }
 
 1;
