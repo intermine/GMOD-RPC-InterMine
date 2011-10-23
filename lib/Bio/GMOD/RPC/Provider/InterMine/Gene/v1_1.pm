@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Moose;
+use Webservice::InterMine 0.9811;
 
 with 'Bio::GMOD::RPC::Provider';
 with 'Bio::GMOD::RPC::InterMine::SOResolver';
@@ -35,7 +36,7 @@ sub get_data {
         $rs = $rs->where("$params{type}.organism.species" => $params{species});
     }
 
-    [ map {$_->{accession} = $_->{primaryIdentifier}; $_} map { $_->href } $rs->all()];
+    [ map {$_->{accession} = $_->{primaryIdentifier}; $_} map { $_->to_href("short") } $rs->all()];
 }
 
 1;
