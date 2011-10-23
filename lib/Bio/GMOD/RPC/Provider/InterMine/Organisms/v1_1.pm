@@ -5,18 +5,17 @@ use warnings;
 
 use Moose;
 use Webservice::InterMine;
+use List::MoreUtils qw/zip/;
 
 with 'Bio::GMOD::RPC::Provider';
 
 sub get_data {
     my $self = shift;
-    my %params = @_;
 
     my $im = get_service($self->service->config->{intermine}{server});
 
-    my $rs = $im->resultset("Organism")->select(qw/genus species taxonId/);
-
-    [map { {genus => $_->[0], species => $_->[1], taxonomy_id => $_->[2] } } $rs->all()];
+    [map { {zip @{[qw/genus species taxonomy_id/]}, @$_} }
+        $im->table("Organism")->select(qw/genus species taxonId/)->all()]
 }
 
 1;
