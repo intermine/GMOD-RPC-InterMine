@@ -14,9 +14,9 @@ sub get_data {
 
     my $im = get_service($self->service->config->{intermine}{server});
 
-    my $query = $im->new_query(class => "Organism")->select(qw/genus species taxonId/);
+    my $rs = $im->resultset("Organism")->select(qw/genus species taxonId/);
 
-    [map { {genus => $_->[0], species => $_->[1], taxonomy_id => $_->[2] } } $query->all];
+    [map { {genus => $_->[0], species => $_->[1], taxonomy_id => $_->[2] } } $rs->all()];
 }
 
 1;
