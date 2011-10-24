@@ -1,4 +1,4 @@
-package Bio::GMOD::RPC::Provider::Gene::v1_1;
+package Bio::GMOD::RPC::Provider::InterMine::Gene::v1_1;
 
 use strict;
 use warnings;
@@ -20,9 +20,9 @@ with 'Bio::GMOD::RPC::InterMine::SOResolver';
 sub get_data {
     my $self = shift;
     my %params = @_;
-    my $params{type} ||= "Gene";
+    $params{type} ||= "Gene";
     if ($params{type} =~ /^SO:/) {
-        $params{type} = ucfirst($self->_resolve_SO_id($type, "SO"));
+        $params{type} = ucfirst($self->_resolve_SO_id($params{type}, "SO"));
     }
 
     my $im = get_service($self->service->config->{intermine}{server});
@@ -32,8 +32,8 @@ sub get_data {
     if ( $params{taxon} ) {
         $rs = $rs->where("$params{type}.organism.taxonId" => $params{taxon});
     } else {
-        $rs = $rs->where("$params{type}.organism.genus" => $params{species});
-        $rs = $rs->where("$params{type}.organism.species" => $params{species});
+        $rs = $rs->where("$params{type}.organism.genus" => $params{genus}) if $params{genus};
+        $rs = $rs->where("$params{type}.organism.species" => $params{species}) if $params{species};
     }
 
     [ map {$_->{accession} = $_->{primaryIdentifier}; $_} map { $_->to_href("short") } $rs->all()];
